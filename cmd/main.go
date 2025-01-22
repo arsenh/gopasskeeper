@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"gopasskeeper/commands"
+)
 
 func main() {
-	fmt.Println("gopasskeeper offline password manager")
+
+	fmt.Println("*** GoPassKeeper Offline Password Manager ***")
+	commands.Run()
 }
