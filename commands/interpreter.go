@@ -2,25 +2,11 @@ package commands
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
+	"gopasskeeper/actions"
 	"os"
 	"strings"
 )
-
-const (
-	COMMAND_QUIT = iota
-)
-
-func CommandQuit() {
-	os.Exit(0)
-}
-
-type actions map[int]func()
-
-var actionRegistry = actions{
-	COMMAND_QUIT: CommandQuit,
-}
 
 func GetCommandPrompt() (string, error) {
 	for {
@@ -37,12 +23,14 @@ func GetCommandPrompt() (string, error) {
 	}
 }
 
-func GetAction(command string) (func(), error) {
-	// TODO: need to validate command variable content to determine which action need to call.
-	if command == "quit" {
-		return actionRegistry[COMMAND_QUIT], nil
+func GetAction(command string) (*actions.Action, error) {
+	action, err := Validate(command)
+
+	if err != nil {
+		return nil, err
 	}
-	return nil, errors.New("invalid input. please enter valid command")
+
+	return action, nil
 }
 
 func Run() {
@@ -53,6 +41,6 @@ func Run() {
 			fmt.Println(err)
 			continue
 		}
-		action()
+		action.Run()
 	}
 }
