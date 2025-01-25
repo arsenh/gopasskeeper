@@ -7,6 +7,7 @@ import (
 const (
 	ACTION_QUIT int = iota
 	ACTION_ADD
+	ACTION_HELP
 )
 
 type Args []string
@@ -14,8 +15,9 @@ type Args []string
 type ActionFunction func(args Args)
 
 var actionRegistry = map[int]ActionFunction{
-	ACTION_QUIT: CommandQuit,
-	ACTION_ADD:  CommandAdd,
+	ACTION_QUIT: ActionQuit,
+	ACTION_ADD:  ActionAdd,
+	ACTION_HELP: ActionHelp,
 }
 
 type Action struct {

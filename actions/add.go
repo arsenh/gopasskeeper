@@ -1,5 +1,5 @@
 package actions
 
-func CommandAdd(args Args) {
+func ActionAdd(args Args) {
 
 }
