@@ -18,5 +18,5 @@ func Validate(command string) (*actions.Action, error) {
 		commandId = actions.ACTION_HELP
 		return actions.GetAction(commandId, args), nil
 	}
-	return nil, errors.New("invalid input. please enter valid command")
+	return nil, errors.New("invalid input. use the 'help' command to view detailed instructions and additional information")
 }
