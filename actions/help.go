@@ -18,18 +18,18 @@ Options:
   --service       Specify the service name (e.g., Gmail, Facebook).
   --username      Specify the username for the service.
   --password      Provide the password for the service (required for 'add').
-  --notes         Add optional notes (e.g., security questions, recovery info).
+  --note         Add optional note (e.g., security questions, recovery info).
   --length        Specify the length of the generated password (for 'generate').
   --complexity    Set complexity for password generation: 
                   (e.g., lowercase, uppercase, numbers, symbols).
 
 Examples:
-  >>> add  --service=gmail --username=user@example.com --password=securePass123 --notes="Dog's name"
-  >>> edit --service=gmail --username=newUser@example.com --password=securePass56789 --notes="Cat's name"
+  >>> add  --service=gmail --username=user@example.com --password=securePass123 --note="Dog's name"
+  >>> edit --service=gmail --username=newUser@example.com --password=securePass56789 --note="Cat's name"
   >>> delete --service=gmail
   >>> retrieve --service=gmail
   >>> generate --length 16 --complexity={uppercase,numbers,symbols} - by default only lowercase letters, but you can
                                                                       add options such as uppercase letters, numbers, symbols.
 
-  NOTE: --notes is optional, but quotes are required to preserve the entire string.`)
+  NOTE: --note is optional, but quotes are required to preserve the entire string.`)
 }

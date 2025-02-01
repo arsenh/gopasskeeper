@@ -9,10 +9,15 @@ import (
 
 // commands
 const (
+	QUIT_COMMAND = "quit"
+	HELP_COMMAND = "help"
+	ADD_COMMAND  = "add"
+	EDIT_COMMAND = "edit"
+)
+
+// error messages
+const (
 	INVALID_COMMAND = "invalid input. use the 'help' command to view detailed instructions and additional information"
-	QUIT_COMMAND    = "quit"
-	HELP_COMMAND    = "help"
-	ADD_COMMAND     = "add"
 )
 
 func parseInput(input string) (string, actions.Args) {
@@ -40,14 +45,68 @@ func parseInput(input string) (string, actions.Args) {
 }
 
 func isValidAddCommandParameters(args actions.Args) bool {
-	if args[actions.SERVICE_ARG] == "" || args[actions.USERNAME_ARG] == "" || args[actions.PASSWORD_ARG] == "" {
-		return false
+	allowedArgs := map[string]bool{
+		actions.SERVICE_ARG:  true,
+		actions.USERNAME_ARG: true,
+		actions.PASSWORD_ARG: true,
+		actions.NOTES_ARG:    true, // Optional
 	}
 
-	argsCount := len(args)
-	_, hasNotes := args[actions.NOTES_ARG]
+	// Required parameters
+	serviceSet := false
+	usernameSet := false
+	passwordSet := false
 
-	return argsCount == 3 || (hasNotes && argsCount == 4)
+	for k, v := range args {
+		// Reject any invalid parameter
+		if !allowedArgs[k] {
+			return false
+		}
+
+		// Ensure required arguments are set (not empty)
+		if k == actions.SERVICE_ARG && v != "" {
+			serviceSet = true
+		}
+		if k == actions.USERNAME_ARG && v != "" {
+			usernameSet = true
+		}
+		if k == actions.PASSWORD_ARG && v != "" {
+			passwordSet = true
+		}
+	}
+
+	// SERVICE_ARG, USERNAME_ARG, and PASSWORD_ARG must be set and non-empty
+	return serviceSet && usernameSet && passwordSet
+}
+
+func isValidEditCommandParameters(args actions.Args) bool {
+
+	allowedArgs := map[string]bool{
+		actions.SERVICE_ARG:  true,
+		actions.USERNAME_ARG: true,
+		actions.PASSWORD_ARG: true,
+		actions.NOTES_ARG:    true, // Optional
+	}
+
+	serviceSet := false
+	usernameOrPasswordSet := false
+
+	for k, v := range args {
+		if !allowedArgs[k] {
+			return false
+		}
+
+		if k == actions.SERVICE_ARG && v != "" {
+			serviceSet = true
+		}
+
+		if (k == actions.USERNAME_ARG || k == actions.PASSWORD_ARG) && v != "" {
+			usernameOrPasswordSet = true
+		}
+	}
+
+	// SERVICE_ARG, USERNAME_ARG, or PASSWORD_ARG must be set and non-empty
+	return serviceSet && usernameOrPasswordSet
 }
 
 func Validate(prompt string) (*actions.Action, error) {
@@ -72,6 +131,12 @@ func Validate(prompt string) (*actions.Action, error) {
 			return nil, errors.New(INVALID_COMMAND)
 		}
 		return actions.GetAction(actions.ACTION_ADD, args), nil
+	case EDIT_COMMAND:
+		isValid := isValidEditCommandParameters(args)
+		if !isValid {
+			return nil, errors.New(INVALID_COMMAND)
+		}
+		return actions.GetAction(actions.ACTION_EDIT, args), nil
 	default:
 		return nil, errors.New(INVALID_COMMAND)
 	}
