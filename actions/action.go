@@ -10,7 +10,15 @@ const (
 	ACTION_HELP
 )
 
-type Args []string
+// command arguments
+const (
+	SERVICE_ARG  = "service"
+	USERNAME_ARG = "username"
+	PASSWORD_ARG = "password"
+	NOTES_ARG    = "notes"
+)
+
+type Args map[string]string
 
 type ActionFunction func(args Args)
 
