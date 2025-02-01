@@ -1,21 +1,44 @@
 package commands
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strings"
+
+	"github.com/chzyer/readline"
 )
 
+func ReturnConfiguredReadLine() *readline.Instance {
+	rl, err := readline.NewEx(&readline.Config{
+		Prompt:          ">>>",
+		HistoryFile:     "/tmp/gopasskeeper_history.tmp",
+		AutoComplete:    nil,
+		InterruptPrompt: "^C",
+		EOFPrompt:       "^D",
+	})
+	if err != nil {
+		log.Fatal("internal: readLine error:", err)
+	}
+	return rl
+}
+
 func GetCommandPrompt() string {
+	rl := ReturnConfiguredReadLine()
+	defer rl.Close()
+
 	for {
-		fmt.Print(">>> ")
-		reader := bufio.NewReader(os.Stdin)
-		enter, err := reader.ReadString('\n')
-		if err != nil {
-			log.Fatal("something went wrong")
+		enter, err := rl.Readline()
+
+		if err == readline.ErrInterrupt || err == io.EOF { // ctrl+C || ctrl+D
+			fmt.Printf("\nuse '%s' to exit instead.\n", QUIT_COMMAND)
+			continue
 		}
+
+		if err != nil {
+			log.Fatal("internal: something went wrong with read input")
+		}
+
 		fmt.Print("\n")
 		enter = strings.TrimSpace(enter)
 

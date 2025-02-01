@@ -13,6 +13,7 @@ Commands:
   delete          Delete credentials by service name or username.
   retrieve        Retrieve credentials by service name or username.
   generate        Generate a random secure password.
+  quit            Exiting the program
 
 Options:
   --service       Specify the service name (e.g., Gmail, Facebook).
