@@ -9,6 +9,9 @@ const (
 	ACTION_HELP
 	ACTION_ADD
 	ACTION_EDIT
+	ACTION_DELETE
+	ACTION_RETRIEVE
+	ACTION_GENERATE
 )
 
 // command arguments
@@ -24,10 +27,13 @@ type Args map[string]string
 type ActionFunction func(args Args)
 
 var actionRegistry = map[int]ActionFunction{
-	ACTION_QUIT: ActionQuit,
-	ACTION_ADD:  ActionAdd,
-	ACTION_HELP: ActionHelp,
-	ACTION_EDIT: ActionEdit,
+	ACTION_QUIT:     ActionQuit,
+	ACTION_ADD:      ActionAdd,
+	ACTION_HELP:     ActionHelp,
+	ACTION_EDIT:     ActionEdit,
+	ACTION_DELETE:   ActionDelete,
+	ACTION_RETRIEVE: ActionRetrieve,
+	ACTION_GENERATE: ActionGenerate,
 }
 
 type Action struct {

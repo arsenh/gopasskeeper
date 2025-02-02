@@ -9,10 +9,13 @@ import (
 
 // commands
 const (
-	QUIT_COMMAND = "quit"
-	HELP_COMMAND = "help"
-	ADD_COMMAND  = "add"
-	EDIT_COMMAND = "edit"
+	QUIT_COMMAND     = "quit"
+	HELP_COMMAND     = "help"
+	ADD_COMMAND      = "add"
+	EDIT_COMMAND     = "edit"
+	DELETE_COMMAND   = "delete"
+	RETRIEVE_COMMAND = "retrieve"
+	GENERATE_COMMAND = "generate"
 )
 
 // error messages

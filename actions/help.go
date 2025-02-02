@@ -11,7 +11,7 @@ Commands:
   add             Add new credentials.
   edit            Edit existing credentials.
   delete          Delete credentials by service name or username.
-  retrieve        Retrieve credentials by service name or username.
+  retrieve        Retrieve credentials by service name.
   generate        Generate a random secure password.
   quit            Exiting the program
 
