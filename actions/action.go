@@ -16,10 +16,16 @@ const (
 
 // command arguments
 const (
-	SERVICE_ARG  = "service"
-	USERNAME_ARG = "username"
-	PASSWORD_ARG = "password"
-	NOTES_ARG    = "note"
+	SERVICE_ARG    = "service"
+	USERNAME_ARG   = "username"
+	PASSWORD_ARG   = "password"
+	NOTES_ARG      = "note"
+	COMPLEXITY_ARG = "complexity"
+	LENGTH_ARG     = "length"
+
+	COMPLEXITY_UPPERCASE_ARG = "uppercase"
+	COMPLEXITY_NUMBERS_ARG   = "numbers"
+	COMPLEXITY_SYMBOLS_ARG   = "symbols"
 )
 
 type Args map[string]string

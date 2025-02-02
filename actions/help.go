@@ -29,8 +29,9 @@ Examples:
   >>> edit --service=gmail --username=newUser@example.com --password=securePass56789 --note="Cat's name"
   >>> delete --service=gmail
   >>> get --service=gmail
-  >>> generate --length 16 --complexity={uppercase,numbers,symbols} - by default only lowercase letters, but you can
+  >>> generate --length=16 --complexity={uppercase,numbers,symbols} - by default only lowercase letters, but you can
                                                                       add options such as uppercase letters, numbers, symbols.
 
-  NOTE: --note is optional, but quotes are required to preserve the entire string.`)
+  NOTE: --note is optional, but quotes are required to preserve the entire string.
+        If the --complexity option is not specified, the password will be generated using lowercase letters only.`)
 }

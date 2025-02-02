@@ -117,6 +117,44 @@ func isOnlyServiceParameterProvided(args actions.Args) bool {
 	return ok && value != "" && len(args) == 1
 }
 
+func isValidGenereteParameters(args actions.Args) bool {
+
+	if len(args) == 0 {
+		return false
+	}
+
+	allowedArgs := map[string]bool{
+		actions.LENGTH_ARG:     true,
+		actions.COMPLEXITY_ARG: true,
+	}
+
+	for k, v := range args {
+		if !allowedArgs[k] {
+			return false
+		}
+
+		if k == actions.LENGTH_ARG && v == "" {
+			return false
+		}
+
+		if k == actions.COMPLEXITY_ARG && v != "" {
+			fields := strings.Split(v, ",")
+			validComplexity := map[string]bool{
+				actions.COMPLEXITY_NUMBERS_ARG:   true,
+				actions.COMPLEXITY_SYMBOLS_ARG:   true,
+				actions.COMPLEXITY_UPPERCASE_ARG: true,
+			}
+
+			for _, field := range fields {
+				if !validComplexity[field] {
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+
 func Validate(prompt string) (*actions.Action, error) {
 	var args actions.Args = nil
 
@@ -158,6 +196,12 @@ func Validate(prompt string) (*actions.Action, error) {
 			return nil, errors.New(INVALID_COMMAND)
 		}
 		return actions.GetAction(actions.ACTION_GET, args), nil
+	case GENERATE_COMMAND:
+		isValid := isValidGenereteParameters(args)
+		if !isValid {
+			return nil, errors.New(INVALID_COMMAND)
+		}
+		return actions.GetAction(actions.ACTION_GENERATE, args), nil
 	default:
 		return nil, errors.New(INVALID_COMMAND)
 	}
