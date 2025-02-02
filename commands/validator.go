@@ -14,7 +14,7 @@ const (
 	ADD_COMMAND      = "add"
 	EDIT_COMMAND     = "edit"
 	DELETE_COMMAND   = "delete"
-	RETRIEVE_COMMAND = "retrieve"
+	GET_COMMAND      = "get"
 	GENERATE_COMMAND = "generate"
 )
 
@@ -112,6 +112,11 @@ func isValidEditCommandParameters(args actions.Args) bool {
 	return serviceSet && usernameOrPasswordSet
 }
 
+func isOnlyServiceParameterProvided(args actions.Args) bool {
+	value, ok := args[actions.SERVICE_ARG]
+	return ok && value != "" && len(args) == 1
+}
+
 func Validate(prompt string) (*actions.Action, error) {
 	var args actions.Args = nil
 
@@ -140,6 +145,19 @@ func Validate(prompt string) (*actions.Action, error) {
 			return nil, errors.New(INVALID_COMMAND)
 		}
 		return actions.GetAction(actions.ACTION_EDIT, args), nil
+
+	case DELETE_COMMAND:
+		isValid := isOnlyServiceParameterProvided(args)
+		if !isValid {
+			return nil, errors.New(INVALID_COMMAND)
+		}
+		return actions.GetAction(actions.ACTION_DELETE, args), nil
+	case GET_COMMAND:
+		isValid := isOnlyServiceParameterProvided(args)
+		if !isValid {
+			return nil, errors.New(INVALID_COMMAND)
+		}
+		return actions.GetAction(actions.ACTION_GET, args), nil
 	default:
 		return nil, errors.New(INVALID_COMMAND)
 	}

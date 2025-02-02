@@ -8,10 +8,10 @@ Usage:
   >>> [command] [options]
 
 Commands:
-  add             Add new credentials.
-  edit            Edit existing credentials.
-  delete          Delete credentials by service name or username.
-  retrieve        Retrieve credentials by service name.
+  add             Add new credential.
+  edit            Edit existing credential.
+  delete          Delete credential by service name or username.
+  get             Get credential by service name.
   generate        Generate a random secure password.
   quit            Exiting the program
 
@@ -28,7 +28,7 @@ Examples:
   >>> add  --service=gmail --username=user@example.com --password=securePass123 --note="Dog's name"
   >>> edit --service=gmail --username=newUser@example.com --password=securePass56789 --note="Cat's name"
   >>> delete --service=gmail
-  >>> retrieve --service=gmail
+  >>> get --service=gmail
   >>> generate --length 16 --complexity={uppercase,numbers,symbols} - by default only lowercase letters, but you can
                                                                       add options such as uppercase letters, numbers, symbols.
 

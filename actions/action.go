@@ -10,7 +10,7 @@ const (
 	ACTION_ADD
 	ACTION_EDIT
 	ACTION_DELETE
-	ACTION_RETRIEVE
+	ACTION_GET
 	ACTION_GENERATE
 )
 
@@ -32,7 +32,7 @@ var actionRegistry = map[int]ActionFunction{
 	ACTION_HELP:     ActionHelp,
 	ACTION_EDIT:     ActionEdit,
 	ACTION_DELETE:   ActionDelete,
-	ACTION_RETRIEVE: ActionRetrieve,
+	ACTION_GET:      ActionGet,
 	ACTION_GENERATE: ActionGenerate,
 }
 
