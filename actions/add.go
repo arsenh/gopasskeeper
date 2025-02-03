@@ -1,18 +1,27 @@
 package actions
 
-import "fmt"
+import (
+	"fmt"
+	"gopasskeeper/helpers"
+)
 
-func ActionAdd(args Args) {
-	//TODO: delete dump of args.
-	fmt.Println("Run Add Command with Args:")
-	fmt.Println("service: ", args[SERVICE_ARG])
-	fmt.Println("username: ", args[USERNAME_ARG])
-	fmt.Println("password: ", args[PASSWORD_ARG])
+type AddCommandArgs struct {
+	Service  string
+	Username string
+	Password string
+	Note     helpers.Optional[string]
+}
 
-	notes, ok := args[NOTES_ARG]
-	if ok {
-		fmt.Println("notes: ", notes)
+func ActionAdd(args *AddCommandArgs) {
+
+	fmt.Println("** Process Add Command **")
+	fmt.Println("service:", args.Service)
+	fmt.Println("username:", args.Username)
+	fmt.Println("password:", args.Password)
+
+	if args.Note.HasValue() {
+		fmt.Println("note:", args.Note.MustGet())
 	} else {
-		fmt.Println("notes argument is not set")
+		fmt.Println("note parameter is not provided")
 	}
 }

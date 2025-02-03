@@ -2,6 +2,6 @@ package actions
 
 import "os"
 
-func ActionQuit(args Args) {
+func ActionQuit(args any) {
 	os.Exit(0)
 }

@@ -14,53 +14,67 @@ const (
 	ACTION_GENERATE
 )
 
-// command arguments
-const (
-	SERVICE_ARG    = "service"
-	USERNAME_ARG   = "username"
-	PASSWORD_ARG   = "password"
-	NOTES_ARG      = "note"
-	COMPLEXITY_ARG = "complexity"
-	LENGTH_ARG     = "length"
-
-	COMPLEXITY_UPPERCASE_ARG = "uppercase"
-	COMPLEXITY_NUMBERS_ARG   = "numbers"
-	COMPLEXITY_SYMBOLS_ARG   = "symbols"
-)
-
-type Args map[string]string
-
-type ActionFunction func(args Args)
-
-var actionRegistry = map[int]ActionFunction{
-	ACTION_QUIT:     ActionQuit,
-	ACTION_ADD:      ActionAdd,
-	ACTION_HELP:     ActionHelp,
-	ACTION_EDIT:     ActionEdit,
-	ACTION_DELETE:   ActionDelete,
-	ACTION_GET:      ActionGet,
-	ACTION_GENERATE: ActionGenerate,
-}
-
 type Action struct {
-	function ActionFunction
-	args     Args
+	Args any
+	Fn   func(any)
 }
 
 func (a *Action) Run() {
-	a.function(a.args)
+	if a.Fn != nil {
+		a.Fn(a.Args)
+	} else {
+		log.Fatal("No function assigned")
+	}
 }
 
-func GetAction(actionNumber int, args Args) *Action {
-
-	f, ok := actionRegistry[actionNumber]
-
-	if !ok {
-		log.Fatal("invalid operation (action) is selected")
-	}
-
+func NewAction[T any](args T, fn func(T)) *Action {
 	return &Action{
-		function: f,
-		args:     args,
+		Args: args,
+		Fn:   func(v any) { fn(v.(T)) },
+	}
+}
+
+func GetAction(actionNumber int, args any) *Action {
+	switch actionNumber {
+	case ACTION_QUIT:
+		var dummy any = struct{}{}
+		return NewAction(dummy, ActionQuit)
+	case ACTION_HELP:
+		var dummy any = struct{}{}
+		return NewAction(dummy, ActionHelp)
+	case ACTION_ADD:
+		addargs, ok := args.(*AddCommandArgs)
+		if !ok {
+			log.Fatal("invalid operation (action) is selected")
+		}
+		return NewAction(addargs, ActionAdd)
+	case ACTION_EDIT:
+		editargs, ok := args.(*EditCommandArgs)
+		if !ok {
+			log.Fatal("invalid operation (action) is selected")
+		}
+		return NewAction(editargs, ActionEdit)
+	case ACTION_GET:
+		getargs, ok := args.(*struct{ Service string })
+		if !ok {
+			log.Fatal("invalid operation (action) is selected")
+		}
+		return NewAction(getargs, ActionGet)
+	case ACTION_DELETE:
+		deleteargs, ok := args.(*struct{ Service string })
+		if !ok {
+			log.Fatal("invalid operation (action) is selected")
+		}
+		return NewAction(deleteargs, ActionDelete)
+	case ACTION_GENERATE:
+		getargs, ok := args.(*GenerateCommandArgs)
+		if !ok {
+			log.Fatal("invalid operation (action) is selected")
+		}
+		return NewAction(getargs, ActionGenerate)
+
+	default:
+		log.Fatal("invalid operation (action) is selected")
+		return nil
 	}
 }

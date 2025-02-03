@@ -2,7 +2,7 @@ package actions
 
 import "fmt"
 
-func ActionDelete(args Args) {
-	fmt.Println("Process Delete:")
-	fmt.Println("args: ", args)
+func ActionDelete(args *struct{ Service string }) {
+	fmt.Println("** Process Delete Command **")
+	fmt.Println("service:", args.Service)
 }

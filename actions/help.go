@@ -2,7 +2,7 @@ package actions
 
 import "fmt"
 
-func ActionHelp(args Args) {
+func ActionHelp(args any) {
 	fmt.Println(`
 Usage:
   >>> [command] [options]
@@ -21,7 +21,7 @@ Options:
   --password      Provide the password for the service (required for 'add').
   --note         Add optional note (e.g., security questions, recovery info).
   --length        Specify the length of the generated password (for 'generate').
-  --complexity    Set complexity for password generation: 
+  --complexity    Set complexity for password generation:
                   (e.g., lowercase, uppercase, numbers, symbols).
 
 Examples:
