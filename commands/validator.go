@@ -239,13 +239,13 @@ func Validate(prompt string) (*actions.Action, error) {
 		if !isValid {
 			return nil, errors.New(INVALID_COMMAND)
 		}
-		return actions.GetAction(actions.ACTION_DELETE, &struct{ Service string }{Service: service}), nil
+		return actions.GetAction(actions.ACTION_DELETE, service), nil
 	case GET_COMMAND:
 		isValid, service := isOnlyServiceParameterProvided(parsedArgs)
 		if !isValid {
 			return nil, errors.New(INVALID_COMMAND)
 		}
-		return actions.GetAction(actions.ACTION_GET, &struct{ Service string }{Service: service}), nil
+		return actions.GetAction(actions.ACTION_GET, service), nil
 	case GENERATE_COMMAND:
 		isValid, args := isValidGenereteParameters(parsedArgs)
 		if !isValid {

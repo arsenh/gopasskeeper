@@ -55,17 +55,17 @@ func GetAction(actionNumber int, args any) *Action {
 		}
 		return NewAction(editargs, ActionEdit)
 	case ACTION_GET:
-		getargs, ok := args.(*struct{ Service string })
+		service, ok := args.(string)
 		if !ok {
 			log.Fatal("invalid operation (action) is selected")
 		}
-		return NewAction(getargs, ActionGet)
+		return NewAction(service, ActionGet)
 	case ACTION_DELETE:
-		deleteargs, ok := args.(*struct{ Service string })
+		service, ok := args.(string)
 		if !ok {
 			log.Fatal("invalid operation (action) is selected")
 		}
-		return NewAction(deleteargs, ActionDelete)
+		return NewAction(service, ActionDelete)
 	case ACTION_GENERATE:
 		getargs, ok := args.(*GenerateCommandArgs)
 		if !ok {

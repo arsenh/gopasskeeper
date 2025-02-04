@@ -2,7 +2,7 @@ package actions
 
 import "fmt"
 
-func ActionGet(args *struct{ Service string }) {
+func ActionGet(service string) {
 	fmt.Println("** Process Get Command **")
-	fmt.Println("service:", args.Service)
+	fmt.Println("service:", service)
 }

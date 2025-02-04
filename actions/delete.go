@@ -1,8 +1,10 @@
 package actions
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func ActionDelete(args *struct{ Service string }) {
+func ActionDelete(service string) {
 	fmt.Println("** Process Delete Command **")
-	fmt.Println("service:", args.Service)
+	fmt.Println("service:", service)
 }
