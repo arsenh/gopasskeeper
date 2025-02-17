@@ -2,17 +2,21 @@ package commands
 
 import (
 	"fmt"
+	"gopasskeeper/storage"
 	"io"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/chzyer/readline"
 )
 
+var historyFilePath string = "/tmp/gopasskeeper_history.tmp"
+
 func ReturnConfiguredReadLine() *readline.Instance {
 	rl, err := readline.NewEx(&readline.Config{
 		Prompt:          ">>>",
-		HistoryFile:     "/tmp/gopasskeeper_history.tmp",
+		HistoryFile:     historyFilePath,
 		AutoComplete:    nil,
 		InterruptPrompt: "^C",
 		EOFPrompt:       "^D",
@@ -49,7 +53,30 @@ func GetCommandPrompt() string {
 	}
 }
 
+func ConfigLog() {
+	log.SetFlags(0)
+	log.SetOutput(os.Stderr)
+	log.SetPrefix("gopasskeeper: ")
+}
+
 func Run() {
+	ConfigLog()
+	passwordFile := storage.GetPasswordFile()
+
+	defer passwordFile.Close()
+
+	if passwordFile == nil {
+		log.Fatal("unable to create password file in home directory")
+	}
+
+	defer func() {
+		// this file must be deleted on appllication exit for security reasons
+		err := os.Remove(historyFilePath)
+		if err != nil {
+			log.Fatalf("unable to delete history file %s, please do it manually for security reasons", historyFilePath)
+		}
+	}()
+
 	for {
 		prompt := GetCommandPrompt()
 		action, err := Validate(prompt)
