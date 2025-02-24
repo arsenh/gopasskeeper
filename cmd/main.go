@@ -2,11 +2,19 @@ package main
 
 import (
 	"fmt"
+	. "gopasskeeper/colors"
 	"gopasskeeper/commands"
 )
 
-func main() {
+func printBanner() {
+	fmt.Println(Bold + Blue + "***********************************************************" + Reset)
+	fmt.Println(Bold + Green + "🚀  Welcome to GoPassKeeper - Offline Password Manager  🔒" + Reset)
+	fmt.Println(Bold + Blue + "***********************************************************" + Reset)
+	fmt.Println(Yellow + "🔑 Securely store and manage your passwords offline!" + Reset)
+	fmt.Println()
+}
 
-	fmt.Println("*** GoPassKeeper Offline Password Manager ***")
+func main() {
+	printBanner()
 	commands.Run()
 }
