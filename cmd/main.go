@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"gopasskeeper/commands"
 	"gopasskeeper/constants"
+	"gopasskeeper/interpreter"
 )
 
 func main() {
 	fmt.Println(constants.AppBannerMsg)
 	fmt.Println()
-	commands.Run()
+	interpreter.Run()
 }
