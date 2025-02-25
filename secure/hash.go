@@ -1,6 +1,7 @@
 package secure
 
 import (
+	"gopasskeeper/constants"
 	"log"
 	"sync"
 
@@ -18,7 +19,7 @@ func InitializePasswordHash(masterPassword string) string {
 		aesKey := GenerateAESKeyFromPassword(masterPassword)
 		encryptedPasswordHash, err := EncryptAES(aesKey, passwordHash)
 		if err != nil {
-			log.Fatal("internal crypto error")
+			log.Fatal(constants.ErrInternalCrypto)
 		}
 		masterPasswordHash = encryptedPasswordHash
 	})
@@ -45,7 +46,7 @@ func GetMasterPasswordHash() string {
 func GeneratePasswordHash(password string) string {
 	hashBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		log.Fatal("internal crypto error")
+		log.Fatal(constants.ErrInternalCrypto)
 	}
 	return string(hashBytes)
 }

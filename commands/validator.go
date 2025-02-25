@@ -3,6 +3,7 @@ package commands
 import (
 	"errors"
 	"gopasskeeper/actions"
+	"gopasskeeper/constants"
 	"gopasskeeper/helpers"
 	"regexp"
 	"strconv"
@@ -32,11 +33,6 @@ const (
 	COMPLEXITY_UPPERCASE_ARG = "uppercase"
 	COMPLEXITY_NUMBERS_ARG   = "numbers"
 	COMPLEXITY_SYMBOLS_ARG   = "symbols"
-)
-
-// error messages
-const (
-	INVALID_COMMAND = "invalid input. use the 'help' command to view detailed instructions and additional information"
 )
 
 func parseInput(input string) (string, map[string]string) {
@@ -218,41 +214,41 @@ func Validate(prompt string) (*actions.Action, error) {
 	command, parsedArgs := parseInput(prompt)
 
 	if command == "" || parsedArgs == nil {
-		return nil, errors.New(INVALID_COMMAND)
+		return nil, errors.New(constants.ErrInvalidCommand)
 	}
 
 	switch command {
 	case ADD_COMMAND:
 		isValid, args := isValidAddCommandParameters(parsedArgs)
 		if !isValid {
-			return nil, errors.New(INVALID_COMMAND)
+			return nil, errors.New(constants.ErrInvalidCommand)
 		}
 		return actions.GetAction(actions.ACTION_ADD, args), nil
 	case EDIT_COMMAND:
 		isValid, args := isValidEditCommandParameters(parsedArgs)
 		if !isValid {
-			return nil, errors.New(INVALID_COMMAND)
+			return nil, errors.New(constants.ErrInvalidCommand)
 		}
 		return actions.GetAction(actions.ACTION_EDIT, args), nil
 	case DELETE_COMMAND:
 		isValid, service := isOnlyServiceParameterProvided(parsedArgs)
 		if !isValid {
-			return nil, errors.New(INVALID_COMMAND)
+			return nil, errors.New(constants.ErrInvalidCommand)
 		}
 		return actions.GetAction(actions.ACTION_DELETE, service), nil
 	case GET_COMMAND:
 		isValid, service := isOnlyServiceParameterProvided(parsedArgs)
 		if !isValid {
-			return nil, errors.New(INVALID_COMMAND)
+			return nil, errors.New(constants.ErrInvalidCommand)
 		}
 		return actions.GetAction(actions.ACTION_GET, service), nil
 	case GENERATE_COMMAND:
 		isValid, args := isValidGenereteParameters(parsedArgs)
 		if !isValid {
-			return nil, errors.New(INVALID_COMMAND)
+			return nil, errors.New(constants.ErrInvalidCommand)
 		}
 		return actions.GetAction(actions.ACTION_GENERATE, args), nil
 	default:
-		return nil, errors.New(INVALID_COMMAND)
+		return nil, errors.New(constants.ErrInvalidCommand)
 	}
 }

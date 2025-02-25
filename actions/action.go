@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"gopasskeeper/constants"
 	"log"
 )
 
@@ -23,7 +24,7 @@ func (a *Action) Run() {
 	if a.Fn != nil {
 		a.Fn(a.Args)
 	} else {
-		log.Fatal("No function assigned")
+		log.Fatal(constants.ErrNoFunctionAssigned)
 	}
 }
 
@@ -45,36 +46,36 @@ func GetAction(actionNumber int, args any) *Action {
 	case ACTION_ADD:
 		addargs, ok := args.(*AddCommandArgs)
 		if !ok {
-			log.Fatal("invalid operation (action) is selected")
+			log.Fatal(constants.ErrInvalidOperationAction)
 		}
 		return NewAction(addargs, ActionAdd)
 	case ACTION_EDIT:
 		editargs, ok := args.(*EditCommandArgs)
 		if !ok {
-			log.Fatal("invalid operation (action) is selected")
+			log.Fatal(constants.ErrInvalidOperationAction)
 		}
 		return NewAction(editargs, ActionEdit)
 	case ACTION_GET:
 		service, ok := args.(string)
 		if !ok {
-			log.Fatal("invalid operation (action) is selected")
+			log.Fatal(constants.ErrInvalidOperationAction)
 		}
 		return NewAction(service, ActionGet)
 	case ACTION_DELETE:
 		service, ok := args.(string)
 		if !ok {
-			log.Fatal("invalid operation (action) is selected")
+			log.Fatal(constants.ErrInvalidOperationAction)
 		}
 		return NewAction(service, ActionDelete)
 	case ACTION_GENERATE:
 		getargs, ok := args.(*GenerateCommandArgs)
 		if !ok {
-			log.Fatal("invalid operation (action) is selected")
+			log.Fatal(constants.ErrInvalidOperationAction)
 		}
 		return NewAction(getargs, ActionGenerate)
 
 	default:
-		log.Fatal("invalid operation (action) is selected")
+		log.Fatal(constants.ErrInvalidOperationAction)
 		return nil
 	}
 }

@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/json"
+	"gopasskeeper/constants"
 	"log"
 	"strings"
 )
@@ -9,7 +10,7 @@ import (
 func SerializePasswordDataToJson(data PasswordJson) string {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
-		log.Fatal("internal serialization error")
+		log.Fatal(constants.ErrInternalSerialization)
 	}
 	return string(jsonData)
 }

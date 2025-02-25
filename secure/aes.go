@@ -5,7 +5,8 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
-	"fmt"
+	"errors"
+	"gopasskeeper/constants"
 	"io"
 )
 
@@ -46,7 +47,7 @@ func DecryptAES(key []byte, ciphertext string) (string, error) {
 	}
 
 	if len(data) < 12 {
-		return "", fmt.Errorf("ciphertext too short")
+		return "", errors.New(constants.ErrCiphertextTooShort)
 	}
 
 	nonce, ciphertext := data[:12], string(data[12:])

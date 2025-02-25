@@ -3,6 +3,7 @@ package storage
 import (
 	"errors"
 	"fmt"
+	"gopasskeeper/constants"
 	"gopasskeeper/secure"
 	"io"
 	"log"
@@ -10,27 +11,13 @@ import (
 	"sync"
 )
 
-var fileCorruptedMsg string = `
-	File Error: Data Corruption Detected. path: %s
-
-	It appears that the file containing your data has become corrupted and cannot be restored. To resolve this issue, please follow these steps:
-
-	Delete the Corrupted File: Locate the file and delete it manually from your system.
-	Restart the Program: Relaunch the application, which will create a new file from scratch.
-`
-
 var passwordsFile *os.File
 var once sync.Once
 
-const (
-	applicationFolderName = ".gopasskeeper"
-	passwordFileName      = applicationFolderName + "/gopasskeeper_passwords.json"
-)
-
 var (
-	ErrPasswordFileIsEmpty = errors.New("password file is empty")
-	ErrInvalidJsonFormat   = errors.New("invalid json format")
-	ErrMasterHashIsEmpty   = errors.New("master hash is empty")
+	ErrPasswordFileIsEmpty = errors.New(constants.ErrPasswordFileIsEmpty)
+	ErrInvalidJsonFormat   = errors.New(constants.ErrInvalidJsonFormat)
+	ErrMasterHashIsEmpty   = errors.New(constants.ErrMasterHashIsEmpty)
 )
 
 func IsPasswordFileIsEmpty(err error) bool {
@@ -49,7 +36,7 @@ func GetPasswordFile() *os.File {
 	once.Do(func() {
 		passwordsFile = setupPasswordFileIfNeeded()
 		if passwordsFile == nil {
-			log.Fatal("unable to setup system files in home directory")
+			log.Fatal(constants.ErrCantCreateFileInHomeDir)
 		}
 	})
 	return passwordsFile
@@ -112,9 +99,9 @@ func StoreJsonDataToPasswordFile(jsonData string) {
 func GetPasswordFilePath() string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatal("unable to get home directory")
+		log.Fatal(constants.ErrGetHomaDir)
 	}
-	return homeDir + string(os.PathSeparator) + passwordFileName
+	return homeDir + string(os.PathSeparator) + constants.PasswordFileName
 }
 
 func getPasswordFileContent() string {
@@ -132,30 +119,30 @@ func setupPasswordFileIfNeeded() *os.File {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatal("unable to get home directory")
+		log.Fatal(constants.ErrGetHomaDir)
 	}
 
-	applicationDirPath := homeDir + string(os.PathSeparator) + applicationFolderName
-	passwordFilePath := homeDir + string(os.PathSeparator) + passwordFileName
+	applicationDirPath := homeDir + string(os.PathSeparator) + constants.ApplicationFolderName
+	passwordFilePath := homeDir + string(os.PathSeparator) + constants.PasswordFileName
 
 	if !fileExists(applicationDirPath) {
 		err = os.Mkdir(applicationDirPath, 0755)
 		if err != nil {
-			log.Fatal("unable to create home directory")
+			log.Fatal(constants.ErrGetHomaDir)
 		}
-		fmt.Printf("application directory not exist, created new one in %s\n", applicationDirPath)
+		fmt.Printf(constants.ApplicationDirNotExistCreateNew, applicationDirPath)
 	}
 
 	if !fileExists(passwordFilePath) {
 		passwordsFile, err = os.OpenFile(passwordFilePath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
 		if err != nil {
-			log.Fatal("unable to create file in home directory")
+			log.Fatal(constants.ErrCreateFileInHomeDir)
 		}
-		fmt.Printf("password file is created %s\n", passwordFilePath)
+		fmt.Printf(constants.PasswordFileCreatedMsg, passwordFilePath)
 	} else {
 		passwordsFile, err = os.OpenFile(passwordFilePath, os.O_RDWR, 0755)
 		if err != nil {
-			log.Fatalf("unable to open existing file in path %s\n", passwordFilePath)
+			log.Fatalf(constants.ErrOpenFile, passwordFilePath)
 		}
 	}
 	return passwordsFile

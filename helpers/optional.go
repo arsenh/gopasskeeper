@@ -1,5 +1,7 @@
 package helpers
 
+import "gopasskeeper/constants"
+
 type Optional[T any] struct {
 	value    T
 	hasValue bool
@@ -15,7 +17,7 @@ func (o Optional[T]) Get() (T, bool) {
 
 func (o Optional[T]) MustGet() T {
 	if !o.hasValue {
-		panic("internal error: invalid access to optional parameter")
+		panic(constants.ErrAccessOptionalParam)
 	}
 	return o.value
 }
