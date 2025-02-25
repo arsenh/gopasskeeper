@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"gopasskeeper/constants"
+	"gopasskeeper/helpers"
 	"gopasskeeper/secure"
-	"io"
 	"log"
 	"os"
 	"sync"
@@ -43,7 +43,7 @@ func GetPasswordFile() *os.File {
 }
 
 func IsMasterPasswordHashAlreadyExist() (*PasswordJson, error) {
-	passwordFileContent := getPasswordFileContent()
+	passwordFileContent := helpers.GetFileContent(passwordsFile)
 
 	if passwordFileContent == "" {
 		return nil, ErrPasswordFileIsEmpty
@@ -89,10 +89,6 @@ func StoreMasterPassword(masterPassword string) {
 	}
 
 	jsonData := SerializePasswordDataToJson(data)
-	StoreJsonDataToPasswordFile(jsonData)
-}
-
-func StoreJsonDataToPasswordFile(jsonData string) {
 	passwordsFile.WriteString(jsonData)
 }
 
@@ -102,17 +98,6 @@ func GetPasswordFilePath() string {
 		log.Fatal(constants.ErrGetHomaDir)
 	}
 	return homeDir + string(os.PathSeparator) + constants.PasswordFileName
-}
-
-func getPasswordFileContent() string {
-	passwordsFile.Seek(0, 0)
-	bytes, _ := io.ReadAll(passwordsFile)
-	return string(bytes)
-}
-
-func fileExists(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return err == nil || !os.IsNotExist(err)
 }
 
 func setupPasswordFileIfNeeded() *os.File {
@@ -125,7 +110,7 @@ func setupPasswordFileIfNeeded() *os.File {
 	applicationDirPath := homeDir + string(os.PathSeparator) + constants.ApplicationFolderName
 	passwordFilePath := homeDir + string(os.PathSeparator) + constants.PasswordFileName
 
-	if !fileExists(applicationDirPath) {
+	if !helpers.FileExists(applicationDirPath) {
 		err = os.Mkdir(applicationDirPath, 0755)
 		if err != nil {
 			log.Fatal(constants.ErrGetHomaDir)
@@ -133,7 +118,7 @@ func setupPasswordFileIfNeeded() *os.File {
 		fmt.Printf(constants.ApplicationDirNotExistCreateNew, applicationDirPath)
 	}
 
-	if !fileExists(passwordFilePath) {
+	if !helpers.FileExists(passwordFilePath) {
 		passwordsFile, err = os.OpenFile(passwordFilePath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
 		if err != nil {
 			log.Fatal(constants.ErrCreateFileInHomeDir)
